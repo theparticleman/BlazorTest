@@ -1,0 +1,68 @@
+﻿@page "/"
+
+<button @onclick="Step" >Step</button>
+
+<pre>
+<table>
+@for (int x = 0; x < 16; x++)
+{
+    <tr>
+    @for (int y = 0; y < 11; y++)
+    {
+        <td>@map[x, y]</td>
+    }
+    </tr>
+}
+</table>
+</pre>
+
+
+@code{
+
+    private static Random rand = new Random();
+
+    private char[,] map = new char[,]
+    {
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
+        {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'}
+    };
+    private Task task;
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("Initialized");
+        task = Task.Run(Update);
+    }
+
+    private async Task Update()
+    {
+        while(true)
+        {
+            Step();
+            await Task.Delay(TimeSpan.FromSeconds(2));
+        }
+    }
+
+    public void Step()
+    {
+        var yPosition = rand.Next(map.GetLength(0));
+        var xPosition = rand.Next(map.GetLength(1));
+        Console.WriteLine($"Changing ({xPosition}, {yPosition})");
+        map[yPosition, xPosition] = '@';
+        this.StateHasChanged();
+    }
+}
