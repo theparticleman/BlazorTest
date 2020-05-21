@@ -1,15 +1,16 @@
-﻿@page "/"
+﻿@inject IJSRuntime jsRuntime;
+@page "/"
 
 <button @onclick="TogglePause" >@buttonText</button>
 
 <pre>
-<table>
-@for (int x = 0; x < 16; x++)
+<table @ref="mapElement" tabindex="0" @onkeydown="OnKeyDown" @onkeyup="OnKeyUp">
+@for (int y = 0; y < 11; y++)
 {
     <tr>
-    @for (int y = 0; y < 11; y++)
+    @for (int x = 0; x < 16; x++)
     {
-        <td>@map[x, y]</td>
+        <td>@ToCharacter(displayMap[x, y])</td>
     }
     </tr>
 }
@@ -19,40 +20,73 @@
 
 @code{
     private static Random rand = new Random();
-
-    private char[,] map = new char[,]
-    {
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'},
-    {'♠','♠','♠','♠','♠','♠','♠','♠','♠','♠','♠'}
-    };
+    private GameTiles[,] displayMap;
+    private GameTiles[,] originalMap;
+    private int playerX, playerY;
     private Task task;
     private string buttonText = "Pause";
     private bool paused;
+    private ElementReference mapElement;
 
     protected override void OnInitialized()
     {
         Console.WriteLine("Initialized");
+        playerX = 7;
+        playerY = 8;
+        displayMap = MapLoader.Load(Maps.H8);
+        originalMap = MapLoader.Load(Maps.H8);
+        displayMap[playerX, playerY] = GameTiles.Player;
         task = Task.Run(Update);
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        Console.WriteLine("Attempting to focus map");
+        await jsRuntime.InvokeVoidAsync("setFocusToElement", mapElement);
     }
 
     public void TogglePause()
     {
         paused = !paused;
         buttonText = paused ? "Unpause" : "Pause";
+    }
+
+    public void OnKeyDown(KeyboardEventArgs e)
+    {
+        Console.WriteLine("Key down: " + e.Key);
+    }
+
+    public void OnKeyUp(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "ArrowUp":
+                displayMap[playerX, playerY] = originalMap[playerX, playerY];
+                playerY--;
+                if (playerY < 0) playerY = 0;
+                displayMap[playerX, playerY] = GameTiles.Player;
+                break;
+            case "ArrowDown":
+                displayMap[playerX, playerY] = originalMap[playerX, playerY];
+                playerY++;
+                if (playerY >= 11) playerY = 10;
+                displayMap[playerX, playerY] = GameTiles.Player;
+                break;
+            case "ArrowLeft":
+                displayMap[playerX, playerY] = originalMap[playerX, playerY];
+                playerX--;
+                if (playerX < 0) playerX = 0;
+                displayMap[playerX, playerY] = GameTiles.Player;
+                break;
+            case "ArrowRight":
+                displayMap[playerX, playerY] = originalMap[playerX, playerY];
+                playerX++;
+                if (playerX >= 16) playerX = 15;
+                displayMap[playerX, playerY] = GameTiles.Player;
+                break;
+        }
+        this.StateHasChanged();
     }
 
     private async Task Update()
@@ -69,10 +103,39 @@
 
     public void Step()
     {
-        var yPosition = rand.Next(map.GetLength(0));
+        @* var yPosition = rand.Next(map.GetLength(0));
         var xPosition = rand.Next(map.GetLength(1));
-        Console.WriteLine($"Changing ({xPosition}, {yPosition})");
-        map[yPosition, xPosition] = characters[rand.Next(characters.Length)];
+        Console.WriteLine($"Changing ({xPosition}, {yPosition})"); *@
+        @* map[yPosition, xPosition] = characters[rand.Next(characters.Length)]; *@
         this.StateHasChanged();
     }
+
+    public char ToCharacter(GameTiles tile)
+    {
+        switch(tile)
+        {
+            case GameTiles.Empty:
+                return ' ';
+            case GameTiles.GreenRock:
+                return (char)182;
+            default:
+                return 'X';
+        }
+    }
+
+    public string PrintMap(GameTiles[,] map)
+    {
+        var result = "";
+        for (int y = 0; y < 11; y++)
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                result += map[x, y];
+            }
+            result += "\r\n";
+        }
+        return result;
+    }
+
+
 }
