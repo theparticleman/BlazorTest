@@ -8,16 +8,23 @@
     <base href="/" />
     <link href="css/site.css" rel="stylesheet" />
     <!-- https://fonts.google.com/specimen/Source+Code+Pro -->
+    <!-- https://fonts.google.com/specimen/VT323 -->
     <style type="text/css">
         @font-face {
-            font-family: "Custom Font";
+            font-family: "Game Font";
             src: url(SourceCodePro-Regular.ttf) format("truetype");
+        }
+        @font-face {
+            font-family: "Site Font";
+            src: url(PressStart2P-Regular.ttf) format("truetype");
         }
     </style>
 </head>
 
 <body>
-    <app>Loading...</app>
+    <div class="loading">
+        <app>Loading...</app>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.

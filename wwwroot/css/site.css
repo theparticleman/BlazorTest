@@ -1,42 +1,4 @@
-﻿/* @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-a, .btn-link {
-    color: #0366d6;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
-app {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.main {
-    flex: 1;
-}
-
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
-
-.invalid {
-    outline: 1px solid red;
-}
-
-.validation-message {
-    color: red;
-} */
-
-#blazor-error-ui {
+﻿#blazor-error-ui {
     background: lightyellow;
     bottom: 0;
     box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
@@ -55,24 +17,72 @@ app {
     top: 0.5rem;
 }
 
+.loading {
+    text-align: center;
+    padding-top: 25%;
+}
+
 body {
-    font-size: 5vmin;
-    font-family: "Custom Font";
     background-color: black;
+    color: white;
+    font-family: "Site Font";
+}
+
+#header {
+    text-align: center;
+    margin-top: -25%;
 }
 
 pre {
     margin: 0px;
-    font-family: "Custom Font";
+    font-family: "Game Font";
 }
 
 table {
+    font-size: 5vmin;
+    font-family: "Game Font";    
     line-height: 0.9;
     border-collapse: collapse;
     background-color: yellow;
     margin-left: auto;
     margin-right: auto;
 }
+
+.center {
+    text-align: center;
+}
+
+@media only screen and (min-width: 1400px) {
+    .center {
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 1.5em;
+        padding-top: 2em;
+        max-width: 1200px;
+    }
+}
+
+@media only screen and (min-width: 800px) and (max-width: 1400px)
+{
+    .center {
+        margin-left: 15%;
+        margin-right: 15%;
+        font-size: 1.5em;
+        padding-top: 2em;
+    }
+}
+
+@media only screen and (max-width: 800px)
+{
+    .center {
+        margin-left: 5%;
+        margin-right: 5%;
+        font-size: 1em;
+        padding-top: 1em;
+    }
+}
+
+
 
 .GreenRock {
     color: green;

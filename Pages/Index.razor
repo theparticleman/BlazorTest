@@ -1,6 +1,11 @@
 ﻿@inject IJSRuntime jsRuntime;
 @page "/"
 
+<div id="header">
+    <h1>Fable of Griselda</h1>
+    <a href="about">About</a>
+</div>
+
 <pre>
 <table @ref="mapElement" tabindex="0" @onkeydown="OnKeyDown" @onkeyup="OnKeyUp">
 @for (int y = 0; y < 11; y++)
