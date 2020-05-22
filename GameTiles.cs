@@ -1,7 +1,7 @@
 public enum GameTiles
 {
     Empty,
-    Player,
+    Hero,
     GreenRock,
     Cave
 }

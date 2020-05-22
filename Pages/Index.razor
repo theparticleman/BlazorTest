@@ -1,8 +1,6 @@
 ﻿@inject IJSRuntime jsRuntime;
 @page "/"
 
-<button @onclick="TogglePause" >@buttonText</button>
-
 <pre>
 <table @ref="mapElement" tabindex="0" @onkeydown="OnKeyDown" @onkeyup="OnKeyUp">
 @for (int y = 0; y < 11; y++)
@@ -10,7 +8,7 @@
     <tr>
     @for (int x = 0; x < 16; x++)
     {
-        <td>@ToCharacter(displayMap[x, y])</td>
+        <td class="@displayMap[x,y].ToString()" >@ToCharacter(displayMap[x, y])</td>
     }
     </tr>
 }
@@ -35,7 +33,7 @@
         playerY = 8;
         displayMap = MapLoader.Load(Maps.H8);
         originalMap = MapLoader.Load(Maps.H8);
-        displayMap[playerX, playerY] = GameTiles.Player;
+        displayMap[playerX, playerY] = GameTiles.Hero;
         task = Task.Run(Update);
     }
 
@@ -54,7 +52,7 @@
 
     public void OnKeyDown(KeyboardEventArgs e)
     {
-        Console.WriteLine("Key down: " + e.Key);
+        @* Console.WriteLine("Key down: " + e.Key); *@
     }
 
     public void OnKeyUp(KeyboardEventArgs e)
@@ -65,25 +63,25 @@
                 displayMap[playerX, playerY] = originalMap[playerX, playerY];
                 playerY--;
                 if (playerY < 0) playerY = 0;
-                displayMap[playerX, playerY] = GameTiles.Player;
+                displayMap[playerX, playerY] = GameTiles.Hero;
                 break;
             case "ArrowDown":
                 displayMap[playerX, playerY] = originalMap[playerX, playerY];
                 playerY++;
                 if (playerY >= 11) playerY = 10;
-                displayMap[playerX, playerY] = GameTiles.Player;
+                displayMap[playerX, playerY] = GameTiles.Hero;
                 break;
             case "ArrowLeft":
                 displayMap[playerX, playerY] = originalMap[playerX, playerY];
                 playerX--;
                 if (playerX < 0) playerX = 0;
-                displayMap[playerX, playerY] = GameTiles.Player;
+                displayMap[playerX, playerY] = GameTiles.Hero;
                 break;
             case "ArrowRight":
                 displayMap[playerX, playerY] = originalMap[playerX, playerY];
                 playerX++;
                 if (playerX >= 16) playerX = 15;
-                displayMap[playerX, playerY] = GameTiles.Player;
+                displayMap[playerX, playerY] = GameTiles.Hero;
                 break;
         }
         this.StateHasChanged();
@@ -118,6 +116,10 @@
                 return ' ';
             case GameTiles.GreenRock:
                 return (char)182;
+            case GameTiles.Hero:
+                return '☻';
+            case GameTiles.Cave:
+                return ' ';
             default:
                 return 'X';
         }

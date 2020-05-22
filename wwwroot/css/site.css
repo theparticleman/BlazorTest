@@ -55,3 +55,36 @@ app {
     top: 0.5rem;
 }
 
+body {
+    font-size: 5vmin;
+    font-family: "Custom Font";
+    background-color: black;
+}
+
+pre {
+    margin: 0px;
+    font-family: "Custom Font";
+}
+
+table {
+    line-height: 0.9;
+    border-collapse: collapse;
+    background-color: yellow;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.GreenRock {
+    color: green;
+    background-color: lightgreen;
+}
+
+.Cave {
+    background-color: black;
+}
+
+.Hero {
+    color: green;
+}
+
+
